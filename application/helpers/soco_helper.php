@@ -107,7 +107,7 @@ if (!function_exists('__IsPhone')) {
 	 * @return [boolen]        [检查结果]
 	 */
 	function __IsPhone($phone) {
-		return preg_match("/^1[34578]\d{9}$/", $phone) ? true : false;
+		return preg_match("/^1[34578]\d{9}$/", $phone);
 	}
 }
 
@@ -118,11 +118,7 @@ if (!function_exists('__IsEmail')) {
 	 * @return [boolen]        [检查结果]
 	 */
 	function __IsEmail($email) {
-		if (preg_match('/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/', $email)) {
-			return true;
-		} else {
-			return false;
-		}
+		return preg_match('/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/', $email);
 	}
 }
 
@@ -177,6 +173,24 @@ if (!function_exists('__IsIdCard')) {
 		}
 
 		return true;
+	}
+}
+
+if (!function_exists('__SaveImg')) {
+	/**
+	 * 保存base64编码的图片
+	 * @param  [string] $img  [base64编码图片]
+	 * @param  [type] $name [description]
+	 * @return [type]       [description]
+	 */
+	function __SaveImg($img, $name) {
+		preg_match('/^(data:\s*image\/(\w+);base64,)/', $img, $result);
+		$type = $result[2];
+		if (!file_exists(APPPATH . '/data/img/' . date('Ymd', time()) . '/') && !mkdir(APPPATH . '/data/img/' . date('Ymd', time()) . '/', 0777, true)) {
+			return false;
+		}
+		file_put_contents(APPPATH . '/data/img/' . date('Ymd', time()) . '/' . $name . '.' . $type, base64_decode(str_replace($result[1], '', $img)));
+		return $name . '.' . $type;
 	}
 }
 

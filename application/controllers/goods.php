@@ -2,24 +2,23 @@
 if (!defined('BASEPATH')) {
 	exit('No direct script access allowed');
 }
-require_once 'SocoCtr.php';
 /**
  * 控制器调用参考
  * @author Ryan <ryantyler423@gmail.com>
  * @group(name="business", description="商品仓库组件")
  */
-class goods extends SocoCtr {
+class goods extends Soco_Controller {
 
 	function __construct() {
 		parent::__construct();
-		$this->__RegCtr(__CLASS__);
+		$this->__RegCtr(__CLASS__, 0);
 	}
 
 	/**
 	 * @ApiDescription(section="insert", method="post", description="增添新的商品")
 	 * @ApiRoute(name="/goods/insert")
 	 * @ApiSuccess(value="{'code' : '300100', 'msg'  : '插入新商品成功', 'data' : '数据'}")
-	 * @ApiExample(value="{'amount' : '100', 'price'  : '5', 'name' : '测试商品' , 'extra' : 'array('color => array('description' => '', 'data' => '具体数据'))'}")
+	 * @ApiExample(value="{'amount' : '100', 'price'  : '5', 'name' : '测试商品' , 'extra' : 'array( array('name' => 'color', 'description' => '颜色', 'data' => '具体数据'))}")
 	 * @ApiParams(name="amount", type="integer", is_selected=true, description="商品总的数量")
 	 * @ApiParams(name="price", type="integer", is_selected=true, description="选购商品的数量")
 	 * @ApiParams(name="name", type="string", is_selected=true, description="商品名称")

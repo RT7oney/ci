@@ -1,10 +1,9 @@
 <?php
-require_once 'SocoMod.php';
 /**
  * 订单表，用于完成支付
  * @author Ryan <ryantyler423@gmail.com>
  */
-class orderMod extends SocoMod {
+class orderMod extends Soco_Model {
 	function __construct() {
 		parent::__construct();
 		$this->__RegMod(__CLASS__, 'order'); // 注册该模型的表

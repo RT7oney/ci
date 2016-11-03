@@ -14,6 +14,42 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
  * --------------------------------------------------------------------
+ * 检查ip白名单
+ * --------------------------------------------------------------------
+ *
+ * @author Ryan <ryantyler423@gmail.com>
+ */
+$hook['pre_system'] = function () {
+	require 'soco.php';
+	function ip() {
+		static $realIP = '';
+		if (isset($_SERVER)) {
+			if (isset($_SERVER["HTTP_X_FORWARDED_FOR"])) {
+				$realIP = $_SERVER["HTTP_X_FORWARDED_FOR"];
+			} else if (isset($_SERVER["HTTP_CLIENT_IP"])) {
+				$realIP = $_SERVER["HTTP_CLIENT_IP"];
+			} else {
+				$realIP = $_SERVER["REMOTE_ADDR"];
+			}
+		} else {
+			if (getenv("HTTP_X_FORWARDED_FOR")) {
+				$realIP = getenv("HTTP_X_FORWARDED_FOR");
+			} else if (getenv("HTTP_CLIENT_IP")) {
+				$realIP = getenv("HTTP_CLIENT_IP");
+			} else {
+				$realIP = getenv("REMOTE_ADDR");
+			}
+		}
+		return $realIP;
+	}
+	if (!in_array(ip(), $config['soco']['allowed_ip'])) {
+		// die('您不在允许的ip里面');
+	}
+
+};
+
+/**
+ * --------------------------------------------------------------------
  * 检查模型和控制器是否注册合法
  * --------------------------------------------------------------------
  *
@@ -71,7 +107,7 @@ $hook['post_controller_constructor'] = function () {
 		$lower_class = strtolower($class);
 		if (preg_match('/' . $lower_class . '/', $ctr[1])) {
 			if (!in_array($class . '.php', $config['soco_controllers']['ignore'])) {
-				if (get_parent_class($class) !== 'SocoCtr') {
+				if (get_parent_class($class) !== 'Soco_Controller') {
 					die('没有继承SocoCtr基础控制器，请联系该控制器开发者');
 				}
 			}

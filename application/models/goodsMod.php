@@ -1,10 +1,9 @@
 <?php
-require_once 'SocoMod.php';
 /**
  * 商品表，将表的颜色等使用json数组存入extra字段
  * @author Ryan <ryantyler423@gmail.com>
  */
-class goodsMod extends SocoMod {
+class goodsMod extends Soco_Model {
 	function __construct() {
 		parent::__construct();
 		$this->__RegMod(__CLASS__, 'goods'); // 注册该模型的表

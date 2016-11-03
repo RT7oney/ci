@@ -24,6 +24,11 @@ $config['soco_models'] = array(
 				'orderMod',
 			), //按照带前缀的表名进行注册
 		),
+		'b' => array(
+			'uc' => array(
+				'userMod',
+			),
+		),
 	),
 );
 ?>

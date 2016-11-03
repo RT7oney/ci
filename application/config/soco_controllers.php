@@ -21,6 +21,7 @@ $config['soco_controllers'] = array(
 		'index',
 		'pay',
 		'goods',
+		'file',
 	),
 );
 ?>

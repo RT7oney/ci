@@ -21,5 +21,15 @@ $config['soco'] = array(
 		'sslkey_path' => '/www/code/soco/back-end/application/libraries/cert/apiclient_key.pem',
 		'pay_key' => '1qazxsw23edcvfr45tgbnhy67ujmki89',
 	),
+	'redis' => array(
+		'host' => '127.0.0.1',
+		'port' => 6379,
+	),
+	'allowed_ip' => array(
+		'127.0.0.1',
+		'192.168.0.44',
+		'192.168.0.26',
+		'192.168.0.28',
+	),
 );
 ?>

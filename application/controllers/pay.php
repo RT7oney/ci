@@ -2,17 +2,16 @@
 if (!defined('BASEPATH')) {
 	exit('No direct script access allowed');
 }
-require_once 'SocoCtr.php';
 /**
  * 控制器调用参考
  * @author Ryan <ryantyler423@gmail.com>
- * @group(name="business", description="支付组件（100）")
+ * @group(name="business", description="支付组件")
  */
-class pay extends SocoCtr {
+class pay extends Soco_Controller {
 
 	function __construct() {
 		parent::__construct();
-		$this->__RegCtr(__CLASS__);
+		$this->__RegCtr(__CLASS__, 0);
 	}
 
 	/**
@@ -47,26 +46,63 @@ class pay extends SocoCtr {
 					$this->__Response(103, '内部错误');
 				}
 			} else {
-				$this->__Response(102, '没有查询到用户信息');
+				$this->__Response(102, '没有查询到商品信息');
 			}
 		} else {
 			$this->__Response(101, '参数不完整');
 		}
 	}
 
+	//0.支付宝网页端
+	//1.支付宝手机端
+	//2.微信扫码natvie
+	//3.微信jsapipay
 	public function pay() {
-		if ($this->input->post('pay_type') && $this->input->post('token')) {
-			if ($this->input->post('pay_type') == 2) {
+		if ($this->input->get('pay_type') && $this->input->get('token')) {
+			switch ($this->input->get('pay_type')) {
+			case 0:
+				break;
+			case 1:
+				break;
+			//TODO 支付宝
+			case 2:
 				// 微信支付扫码支付
 				$this->load->model('orderMod');
-				$data = $this->orderMod->getOrder($this->input->post('token'));
+				$data = $this->orderMod->getOrder($this->input->get('token'));
 				$this->load->library('WechatPay');
 				$url = $this->wechatpay->nativePay($data[0]['order_id'], $data[0]['total_price']);
-				echo 'http://paysdk.weixin.qq.com/example/qrcode.php?data=' . $url; //test
+				$test = 'http://paysdk.weixin.qq.com/example/qrcode.php?data=' . $url; //test
+				$this->__Response(200, '操作成功', $test);
+				break;
+			case 3:
+				// 微信支付jsapi支付
+				$this->load->model('orderMod');
+				$data = $this->orderMod->getOrder($this->input->get('token'));
+				$this->load->library('WechatPay');
+				$res = $this->wechatpay->jsPay($data[0]['order_id'], $data[0]['total_price']);
+				print_r($res);die;
+				break;
+			default:
+				# code...
+				break;
 			}
+
 		} else {
 			$this->__Response(201, '参数不完整');
 		}
+	}
+
+	public function wxnotify() {
+		if (!empty($GLOBALS['HTTP_RAW_POST_DATA'])) {
+			$XML = $GLOBALS['HTTP_RAW_POST_DATA'];
+		} else {
+			$XML = file_get_contents('php://input');
+		}
+		$this->____Response(300, '进入回调', $XML);
+	}
+
+	public function alnotify() {
+
 	}
 }
 ?>
